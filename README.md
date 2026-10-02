@@ -18,6 +18,16 @@ and define a reliable method for determining historical data availability.
 
 Published results should not be interpreted as device commissioning dates or as proof of continuous data coverage.
 
+## Roadmap
+
+- [x] Create initial VMS history inspection script
+- [x] Verify date-specific history queries with `effectiveDate`
+- [ ] Add date-range inspection for a single device
+- [ ] Define a reliable method for finding the earliest retrievable observation
+- [ ] Generate `data/latest.json` and `data/latest.csv`
+- [ ] Add automated tests
+- [ ] Add scheduled GitHub Actions update
+
 ## Planned outputs
 
 The project is expected to publish machine-readable availability data in
