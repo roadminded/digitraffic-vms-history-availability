@@ -8,6 +8,7 @@ found within the requested period.
 
 import argparse
 from datetime import date, timedelta
+import json
 import time
 
 import requests
@@ -16,7 +17,8 @@ import requests
 API_URL = "https://tie.digitraffic.fi/api/variable-sign/v1/signs/history"
 DIGITRAFFIC_USER = "RoadMinded/digitraffic-vms-history-availability"
 
-REQUEST_DELAY_SECONDS = 0.2 # Delay between API requests in seconds to avoid rate limiting
+# Delay between API requests to reduce the risk of rate limiting.
+REQUEST_DELAY_SECONDS = 0.2
 
 
 def fetch_history(device_id: str, effective_date: str) -> list[dict]:
@@ -60,8 +62,9 @@ def scan_device_history(
     device_id: str,
     start_date: date,
     end_date: date,
-) -> None:
-    """Scan a date range and print a summary of available VMS history."""
+    verbose: bool = True,
+) -> dict[str, object]:
+    """Scan a date range and return a summary of available VMS history."""
 
     days_checked = 0
     days_with_observations = 0
@@ -81,7 +84,8 @@ def scan_device_history(
         days_checked += 1
 
         if not observations:
-            print(f"{date_text}: 0")
+            if verbose:
+                print(f"{date_text}: 0")
             time.sleep(REQUEST_DELAY_SECONDS)
             continue
 
@@ -110,18 +114,28 @@ def scan_device_history(
             ):
                 latest_effect_date = day_latest
 
-        print(f"{date_text}: {len(observations)}")
+        if verbose:
+            print(f"{date_text}: {len(observations)}")
 
         time.sleep(REQUEST_DELAY_SECONDS)
 
-    print()
-    print(f"Device: {device_id}")
-    print(f"Period: {start_date} - {end_date}")
-    print(f"Days checked: {days_checked}")
-    print(f"Days with observations: {days_with_observations}")
-    print(f"Observations: {total_observations}")
-    print(f"Earliest effectDate: {earliest_effect_date or 'none'}")
-    print(f"Latest effectDate: {latest_effect_date or 'none'}")
+    earliest_observed_date = (
+        earliest_effect_date[:10]
+        if earliest_effect_date
+        else None
+    )
+
+    return {
+        "device_id": device_id,
+        "scan_start_date": start_date.isoformat(),
+        "scan_end_date": end_date.isoformat(),
+        "earliest_effect_date": earliest_effect_date,
+        "latest_effect_date": latest_effect_date,
+        "days_checked": days_checked,
+        "days_with_observations": days_with_observations,
+        "observations": total_observations,
+        "earliest_observed_date": earliest_observed_date,
+    }
 
 
 def main() -> None:
@@ -152,15 +166,51 @@ def main() -> None:
         help="End date in YYYY-MM-DD format",
     )
 
+    parser.add_argument(
+        "--json",
+        action="store_true",
+        help="Print the scan result as JSON.",
+    )
+
     args = parser.parse_args()
 
     if args.start_date > args.end_date:
         parser.error("--from must be before or equal to --to")
 
-    scan_device_history(
+    result = scan_device_history(
         device_id=args.device_id,
         start_date=args.start_date,
         end_date=args.end_date,
+        verbose=not args.json,
+    )
+    
+    if args.json:
+        print(json.dumps(result, indent=2))
+        return
+
+    print()
+    print(f"Device: {result['device_id']}")
+    print(
+        f"Period: {result['scan_start_date']} - "
+        f"{result['scan_end_date']}"
+    )
+    print(f"Days checked: {result['days_checked']}")
+    print(
+        f"Days with observations: "
+        f"{result['days_with_observations']}"
+    )
+    print(f"Observations: {result['observations']}")
+    print(
+        f"Earliest observed date: "
+        f"{result['earliest_observed_date'] or 'none'}"
+    )
+    print(
+        f"Earliest effectDate: "
+        f"{result['earliest_effect_date'] or 'none'}"
+    )
+    print(
+        f"Latest effectDate: "
+        f"{result['latest_effect_date'] or 'none'}"
     )
 
 
