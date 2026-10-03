@@ -22,7 +22,7 @@ Published results should not be interpreted as device commissioning dates or as 
 
 - [x] Create initial VMS history inspection script
 - [x] Verify date-specific history queries with `effectiveDate`
-- [ ] Add date-range inspection for a single device
+- [x] Add date-range inspection for a single device
 - [ ] Define a reliable method for finding the earliest retrievable observation
 - [ ] Generate `data/latest.json` and `data/latest.csv`
 - [ ] Add automated tests

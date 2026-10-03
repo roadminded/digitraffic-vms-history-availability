@@ -1,0 +1,4 @@
+# Known test devices
+KRM01
+KRM010305
+KRM011552
