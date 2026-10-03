@@ -9,6 +9,7 @@ baseline scans for selected devices.
 import argparse
 import json
 from pathlib import Path
+from datetime import date, datetime
 
 import requests
 from history_scan import advance_device_baseline
@@ -46,11 +47,20 @@ def fetch_signs() -> dict:
 def extract_device_ids(data: dict) -> list[str]:
     """Extract unique VMS device IDs from a Digitraffic signs response."""
 
+    if not isinstance(data, dict):
+        raise ValueError(
+            "Unexpected /signs response type: "
+            f"{type(data).__name__}"
+        )
+
     features = data.get("features")
 
     if not isinstance(features, list):
-        return []
-
+        raise ValueError(
+            "Digitraffic /signs response is missing "
+            "a valid features list."
+        )
+    
     device_ids = []
 
     for feature in features:
@@ -68,6 +78,97 @@ def extract_device_ids(data: dict) -> list[str]:
             device_ids.append(device_id)
 
     return sorted(set(device_ids))
+
+
+def validate_device_state(
+    device_id: str,
+    device_state: object,
+) -> None:
+    """Validate one persistent device scan state."""
+
+    if not isinstance(device_state, dict):
+        raise ValueError(
+            f"State for device {device_id} must be a JSON object."
+        )
+
+    status = device_state.get("status")
+
+    valid_statuses = {
+        "pending",
+        "in_progress",
+        "complete",
+        "no_observations",
+        "error",
+    }
+
+    if status not in valid_statuses:
+        raise ValueError(
+            f"Device {device_id} has invalid status: {status!r}"
+        )
+
+    date_fields = (
+        "verified_from",
+        "verified_through",
+        "scan_cursor_date",
+        "earliest_observed_date",
+    )
+
+    for field_name in date_fields:
+        value = device_state.get(field_name)
+
+        if value is None:
+            continue
+
+        if not isinstance(value, str):
+            raise ValueError(
+                f"Device {device_id} field {field_name} "
+                "must be a date string or null."
+            )
+
+        try:
+            date.fromisoformat(value)
+        except ValueError as exc:
+            raise ValueError(
+                f"Device {device_id} field {field_name} "
+                f"contains an invalid date: {value!r}"
+            ) from exc
+
+    active_statuses = {
+        "pending",
+        "in_progress",
+        "error",
+    }
+
+    if status in active_statuses:
+        cursor = device_state.get("scan_cursor_date")
+
+        if not isinstance(cursor, str):
+            raise ValueError(
+                f"Device {device_id} with status {status!r} "
+                "must have a valid scan_cursor_date."
+            )
+
+    earliest_effect_date = device_state.get(
+        "earliest_effect_date"
+    )
+
+    if earliest_effect_date is not None:
+        if not isinstance(earliest_effect_date, str):
+            raise ValueError(
+                f"Device {device_id} field earliest_effect_date "
+                "must be a datetime string or null."
+            )
+
+        try:
+            datetime.fromisoformat(
+                earliest_effect_date.replace("Z", "+00:00")
+            )
+        except ValueError as exc:
+            raise ValueError(
+                f"Device {device_id} field earliest_effect_date "
+                f"contains an invalid datetime: "
+                f"{earliest_effect_date!r}"
+            ) from exc
 
 
 def load_state() -> dict:
@@ -91,11 +192,30 @@ def load_state() -> dict:
             "State file is missing a valid scan_lower_bound."
         )
 
+    try:
+        date.fromisoformat(scan_lower_bound)
+    except ValueError as exc:
+        raise ValueError(
+            "State file contains an invalid scan_lower_bound: "
+            f"{scan_lower_bound!r}"
+        ) from exc
+
     devices = state.get("devices")
 
     if not isinstance(devices, dict):
         raise ValueError(
             "State file is missing a valid devices object."
+        )
+
+    for device_id, device_state in devices.items():
+        if not isinstance(device_id, str) or not device_id:
+            raise ValueError(
+                "State file contains an invalid device ID."
+            )
+
+        validate_device_state(
+            device_id=device_id,
+            device_state=device_state,
         )
 
     return state
@@ -135,6 +255,52 @@ def load_device_ids_from_file(path: Path) -> list[str]:
             device_ids.append(line)
 
     return list(dict.fromkeys(device_ids))
+
+
+def select_device_ids(
+    available_device_ids: list[str],
+    devices_state: dict,
+    limit: int | None,
+    device_file: Path | None,
+) -> list[str]:
+    """Select VMS device IDs based on CLI arguments."""
+
+    if device_file is not None:
+        requested_device_ids = load_device_ids_from_file(
+            device_file
+        )
+
+        unknown_device_ids = [
+            device_id
+            for device_id in requested_device_ids
+            if device_id not in available_device_ids
+        ]
+
+        if unknown_device_ids:
+            print(
+                "Warning: device ID(s) not present in the current "
+                "/signs response: "
+                + ", ".join(unknown_device_ids)
+            )
+
+        return requested_device_ids
+
+    terminal_statuses = {
+        "complete",
+        "no_observations",
+    }
+
+    selectable_device_ids = [
+        device_id
+        for device_id in available_device_ids
+        if (
+            device_id not in devices_state
+            or devices_state[device_id].get("status")
+            not in terminal_statuses
+        )
+    ]
+
+    return selectable_device_ids[:limit]
 
 
 def main() -> None:
@@ -179,28 +345,12 @@ def main() -> None:
         f"Found {len(available_device_ids)} unique VMS device IDs."
     )
 
-    if args.device_file is not None:
-        requested_device_ids = load_device_ids_from_file(
-            args.device_file
-        )
-
-        unknown_device_ids = [
-            device_id
-            for device_id in requested_device_ids
-            if device_id not in available_device_ids
-        ]
-
-        if unknown_device_ids:
-            print(
-                "Warning: device ID(s) not present in the current "
-                "/signs response: "
-                + ", ".join(unknown_device_ids)
-            )
-
-        device_ids = requested_device_ids
-
-    else:
-        device_ids = available_device_ids[:args.limit]
+    device_ids = select_device_ids(
+        available_device_ids=available_device_ids,
+        devices_state=state["devices"],
+        limit=args.limit,
+        device_file=args.device_file,
+    )
 
     print(f"Processing {len(device_ids)} VMS device IDs.")
 

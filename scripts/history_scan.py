@@ -4,7 +4,7 @@ Scan Digitraffic VMS history for a single device over a date range.
 The module provides functions to fetch historical data for a specific
 VMS device and summarize the observations found within the requested period.
 """
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 import time
 
 import requests
@@ -100,24 +100,55 @@ def check_device_date(
             "error": None,
         }
 
-    effect_dates = [
-        item.get("effectDate")
-        for item in observations
-        if isinstance(item, dict) and item.get("effectDate")
-    ]
+    effect_dates = []
 
-    if not effect_dates:
-        return {
-            "device_id": device_id,
-            "effective_date": date_text,
-            "status": "failed",
-            "observation_count": len(observations),
-            "earliest_effect_date": None,
-            "error": (
-                "History response contained observations "
-                "without usable effectDate values."
-            ),
-        }
+    for item in observations:
+        if not isinstance(item, dict):
+            return {
+                "device_id": device_id,
+                "effective_date": date_text,
+                "status": "failed",
+                "observation_count": len(observations),
+                "earliest_effect_date": None,
+                "error": (
+                    "History response contained "
+                    "a non-object observation."
+                ),
+            }
+
+        effect_date = item.get("effectDate")
+
+        if not isinstance(effect_date, str):
+            return {
+                "device_id": device_id,
+                "effective_date": date_text,
+                "status": "failed",
+                "observation_count": len(observations),
+                "earliest_effect_date": None,
+                "error": (
+                    "History response contained an observation "
+                    "without a valid effectDate."
+                ),
+            }
+
+        try:
+            datetime.fromisoformat(
+                effect_date.replace("Z", "+00:00")
+            )
+        except ValueError:
+            return {
+                "device_id": device_id,
+                "effective_date": date_text,
+                "status": "failed",
+                "observation_count": len(observations),
+                "earliest_effect_date": None,
+                "error": (
+                    "History response contained an invalid "
+                    f"effectDate: {effect_date!r}"
+                ),
+            }
+
+        effect_dates.append(effect_date)
 
     return {
         "device_id": device_id,
