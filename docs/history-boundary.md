@@ -1,25 +1,35 @@
 # VMS history availability boundary
 
-Digitraffic has stored variable sign data and supported history queries since
-at least September 2019:
+Finland's Digitraffic.fi service, operated by Fintraffic Road, has stored
+variable sign data and supported history queries since at least September 2019:
 
 - `DEVICE_DATA` storage was introduced in September 2019.
 - A variable sign history query was added shortly afterwards.
-- History functionality was further developed during 2020–2021.
 
-However, initial API observations suggest that the
-**oldest history currently retrievable for some long-lived devices may begin around 2021-10-28**.
+## Project VMS history boundary
 
-This date should **not yet be treated as a confirmed global retention boundary**.
-It may represent a shared migration, cleanup, or other historical data cutoff
-rather than the beginning of VMS data collection.
+For this project, the historical scan lower bound is currently set to
+**2021-01-01**.
 
-The scanner can be used to test whether multiple older devices converge on
-the same earliest retrievable date. If they do, this may provide a practical
-lower bound for future scans.
+This is a practical project boundary, not a statement that older VMS history
+does not exist. The Digitraffic API may contain retrievable observations from
+before this date.
 
-References:
+## Project scanner functionality
 
-- Digitraffic `DPO-864` VMS data storage, September 2019
-- Digitraffic `DPO-864` history implementation, September 2019
-- Digitraffic `DPO-1186` history improvements, September 2020
+The scanner advances forward from the configured lower bound until it finds
+the earliest retrievable observation for each device. This makes it possible
+to document practical history availability on a device-by-device basis.
+
+The earliest retrievable date may differ between devices and should not be
+interpreted as a confirmed global retention boundary. Differences may reflect
+device commissioning dates, migrations, cleanup, historical data gaps, or
+other changes in the source data.
+
+## References
+
+Relevant VMS development items are documented in the
+[Digitraffic Development Roadmap](https://www.digitraffic.fi/en/development-roadmap/)
+
+- Digitraffic `DPO-864` — variable speed limit signs and information boards,
+  September 2019
