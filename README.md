@@ -27,10 +27,14 @@ The project currently supports:
 - gradual background scanning of incomplete devices
 - request limits and per-device scan limits
 - persistent scan state in data/state.json
-- scheduled weekly scanning with GitHub Actions
+- scheduled daily scanning with GitHub Actions
 
 The current implementation is intentionally small and focused on practical
 history availability checks.
+
+The current Digitraffic `/api/variable-sign/v1/signs` response contains
+more than 500 unique published VMS device IDs, providing a substantial
+device set for history availability scanning.
 
 ## Usage
 
@@ -49,7 +53,7 @@ python scripts/scan_history_availability.py \
   --device-file test_devices.txt
 ```
 
-The file contains one VMS device ID per line:
+The file contains one VMS device ID per line, for example `test_devices.txt`:
 
 ```text
 KRM01
@@ -74,22 +78,24 @@ data/state.json
 Interrupted or partial scans can continue from the stored cursor
 on the next run.
 
-## Inspect a single device
+### Inspect a single device
 
-For quick manual inspection of one VMS device:
-
-```bash
-python scripts/inspect_history.py KRM011552
-```
-
-To inspect a specific historical date:
+For quick manual inspection of one VMS device, the script queries the
+default recent history returned by the Digitraffic API:
 
 ```bash
-python scripts/inspect_history.py KRM011552 --date 2021-10-28
+python scripts/inspect_history.py KRM010305
 ```
 
-This helper prints a short summary of the API response and the first returned
-observation. It does not update `data/state.json`.
+To inspect history for a specific historical date, use `--date`:
+
+```bash
+python scripts/inspect_history.py KRM010305 --date 2021-01-02
+```
+
+The helper prints the request URL, HTTP status, response type, number of
+returned observations, earliest and latest `effectDate` values, and the first
+returned observation. It does not update `data/state.json`.
 
 ## Historical boundary
 
@@ -119,15 +125,6 @@ for additional background.
 If you need availability information for specific VMS devices, you are welcome
 to open an issue and suggest device IDs for prioritised scanning.
 
-Possible future improvements may include:
-
-- geographic device selection using a bounding box
-- GeoJSON or other area-based device selection
-- published `latest.json` and `latest.csv` availability snapshots
-- additional automated validation and tests
-
-These are potential development directions rather than committed features.
-
 ## Roadmap
 
 Completed and planned changes. Planned items are potential future improvements
@@ -142,8 +139,8 @@ and do not represent commitments.
 - [x] Add scheduled background scanning
 - [ ] Generate `data/latest.json` and `data/latest.csv`
 - [ ] Add automated tests
-- [ ] Add `--reset-device` support for rescanning an existing device
-      from the configured lower bound
+- [ ] Add selected-device rescanning from an earlier lower bound using
+      a device list file
 
 ## Data source
 

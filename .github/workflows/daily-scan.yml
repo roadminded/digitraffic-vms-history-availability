@@ -2,7 +2,7 @@ name: Weekly VMS history scan
 
 on:
   schedule:
-    - cron: "17 3 * * 1"
+    - cron: "17 1 * * *"
 
   workflow_dispatch:
 
@@ -10,7 +10,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: weekly-vms-history-scan
+  group: daily-vms-history-scan
   cancel-in-progress: false
 
 jobs:
