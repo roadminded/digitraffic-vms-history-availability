@@ -1,4 +1,4 @@
-name: Weekly VMS history scan
+name: Daily VMS history scan
 
 on:
   schedule:
