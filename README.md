@@ -95,7 +95,9 @@ python scripts/inspect_history.py KRM010305 --date 2021-01-02
 
 The helper prints the request URL, HTTP status, response type, number of
 returned observations, earliest and latest `effectDate` values, and the first
-returned observation. It does not update `data/state.json`.
+returned observation.
+
+These inspection commands do not update `data/state.json`.
 
 ## Historical boundary
 
@@ -137,10 +139,12 @@ and do not represent commitments.
 - [x] Add persistent scan state
 - [x] Add selected-device scanning from a file
 - [x] Add scheduled background scanning
-- [ ] Generate `data/latest.json` and `data/latest.csv`
+- [ ] Add scan summary output for the selected device set, including counts
+      for completed, in-progress, error, and no-observation devices
 - [ ] Add automated tests
-- [ ] Add selected-device rescanning from an earlier lower bound using
-      a device list file
+- [ ] Add selected-device rescanning ("reset") from an earlier lower bound
+      using a device list file
+- [ ] Generate `data/latest.json` and `data/latest.csv` as result summaries
 
 ## Data source
 
