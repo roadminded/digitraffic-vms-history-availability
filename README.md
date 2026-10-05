@@ -139,8 +139,9 @@ and do not represent commitments.
 - [x] Add persistent scan state
 - [x] Add selected-device scanning from a file
 - [x] Add scheduled background scanning
-- [ ] Add scan summary output for the selected device set, including counts
-      for completed, in-progress, error, and no-observation devices
+- [x] Add scan summary output for the selected device set (`--device-file`),
+      including counts for completed, in-progress, error, and no-observation
+      devices
 - [ ] Add automated tests
 - [ ] Add selected-device rescanning ("reset") from an earlier lower bound
       using a device list file

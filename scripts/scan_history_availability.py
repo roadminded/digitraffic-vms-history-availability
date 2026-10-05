@@ -303,6 +303,59 @@ def select_device_ids(
     return selectable_device_ids[:limit]
 
 
+def print_device_summary(
+    device_ids: list[str],
+    devices_state: dict,
+) -> None:
+    """Print scan status counts for a selected device set."""
+
+    status_counts = {
+        "complete": 0,
+        "in_progress": 0,
+        "pending": 0,
+        "error": 0,
+        "no_observations": 0,
+    }
+
+    for device_id in device_ids:
+        device_state = devices_state.get(device_id)
+
+        if device_state is None:
+            status_counts["pending"] += 1
+            continue
+
+        status = device_state.get("status")
+
+        if status in status_counts:
+            status_counts[status] += 1
+
+    print()
+    print("Selected device summary:")
+    print(f"Devices: {len(device_ids)}")
+    print(f"Complete: {status_counts['complete']}")
+    print(f"In progress: {status_counts['in_progress']}")
+    print(f"Pending: {status_counts['pending']}")
+    print(f"Error: {status_counts['error']}")
+    print(
+        "No observations: "
+        f"{status_counts['no_observations']}"
+    )
+
+    completed = status_counts["complete"]
+    total = len(device_ids)
+
+    progress = (
+        completed / total * 100
+        if total
+        else 0
+    )
+
+    print(
+        f"Progress: {completed} / {total} complete "
+        f"({progress:.1f}%)"
+    )
+
+
 def main() -> None:
     """Fetch VMS devices and advance their persistent baseline scans."""
 
@@ -420,6 +473,12 @@ def main() -> None:
         f"Run complete. Requests used: "
         f"{MAX_HISTORY_REQUESTS_PER_RUN - remaining_requests}"
     )
+
+    if args.device_file is not None:
+        print_device_summary(
+            device_ids=device_ids,
+            devices_state=devices_state,
+        )
 
 
 if __name__ == "__main__":
