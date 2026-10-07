@@ -261,19 +261,19 @@
       "earliest_effect_date": null,
       "earliest_observed_date": null,
       "last_error": null,
-      "scan_cursor_date": "2021-05-31",
+      "scan_cursor_date": "2021-09-08",
       "status": "in_progress",
       "verified_from": "2021-01-01",
-      "verified_through": "2021-05-30"
+      "verified_through": "2021-09-07"
     },
     "KRM012653": {
       "earliest_effect_date": null,
       "earliest_observed_date": null,
       "last_error": null,
-      "scan_cursor_date": "2021-04-14",
+      "scan_cursor_date": "2021-07-23",
       "status": "in_progress",
       "verified_from": "2021-01-01",
-      "verified_through": "2021-04-13"
+      "verified_through": "2021-07-22"
     },
     "KRM01K001": {
       "earliest_effect_date": "2021-03-10T20:14:48Z",
@@ -324,28 +324,28 @@
       "earliest_effect_date": null,
       "earliest_observed_date": null,
       "last_error": null,
-      "scan_cursor_date": "2022-02-05",
+      "scan_cursor_date": "2022-05-16",
       "status": "in_progress",
       "verified_from": "2021-01-01",
-      "verified_through": "2022-02-04"
+      "verified_through": "2022-05-15"
     },
     "KRM01M102": {
       "earliest_effect_date": null,
       "earliest_observed_date": null,
       "last_error": null,
-      "scan_cursor_date": "2022-02-05",
+      "scan_cursor_date": "2022-05-16",
       "status": "in_progress",
       "verified_from": "2021-01-01",
-      "verified_through": "2022-02-04"
+      "verified_through": "2022-05-15"
     },
     "KRM01M103": {
       "earliest_effect_date": null,
       "earliest_observed_date": null,
       "last_error": null,
-      "scan_cursor_date": "2022-02-05",
+      "scan_cursor_date": "2022-05-16",
       "status": "in_progress",
       "verified_from": "2021-01-01",
-      "verified_through": "2022-02-04"
+      "verified_through": "2022-05-15"
     },
     "KRM01M203": {
       "earliest_effect_date": "2021-03-29T21:21:37Z",
@@ -387,10 +387,10 @@
       "earliest_effect_date": null,
       "earliest_observed_date": null,
       "last_error": null,
-      "scan_cursor_date": "2021-05-31",
+      "scan_cursor_date": "2021-09-08",
       "status": "in_progress",
       "verified_from": "2021-01-01",
-      "verified_through": "2021-05-30"
+      "verified_through": "2021-09-07"
     },
     "TIO01K103": {
       "earliest_effect_date": "2021-03-10T20:14:50Z",
@@ -405,19 +405,19 @@
       "earliest_effect_date": null,
       "earliest_observed_date": null,
       "last_error": null,
-      "scan_cursor_date": "2021-04-11",
+      "scan_cursor_date": "2021-07-20",
       "status": "in_progress",
       "verified_from": "2021-01-01",
-      "verified_through": "2021-04-10"
+      "verified_through": "2021-07-19"
     },
     "VME/TIO011341": {
       "earliest_effect_date": null,
       "earliest_observed_date": null,
       "last_error": null,
-      "scan_cursor_date": "2021-03-06",
+      "scan_cursor_date": "2021-06-14",
       "status": "in_progress",
       "verified_from": "2021-01-01",
-      "verified_through": "2021-03-05"
+      "verified_through": "2021-06-13"
     },
     "VME/TIO012301": {
       "earliest_effect_date": "2021-01-01T00:21:36Z",
@@ -432,10 +432,10 @@
       "earliest_effect_date": null,
       "earliest_observed_date": null,
       "last_error": null,
-      "scan_cursor_date": "2021-04-11",
+      "scan_cursor_date": "2021-07-20",
       "status": "in_progress",
       "verified_from": "2021-01-01",
-      "verified_through": "2021-04-10"
+      "verified_through": "2021-07-19"
     },
     "VME/TIO01K102": {
       "earliest_effect_date": "2021-03-10T20:14:50Z",
@@ -513,10 +513,10 @@
       "earliest_effect_date": null,
       "earliest_observed_date": null,
       "last_error": null,
-      "scan_cursor_date": "2022-02-05",
+      "scan_cursor_date": "2022-05-16",
       "status": "in_progress",
       "verified_from": "2021-01-01",
-      "verified_through": "2022-02-04"
+      "verified_through": "2022-05-15"
     },
     "VME01M103/TIO01M102": {
       "earliest_effect_date": "2021-03-29T21:21:10Z",
