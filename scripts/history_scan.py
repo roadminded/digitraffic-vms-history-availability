@@ -12,7 +12,6 @@ from digitraffic_config import get_digitraffic_user
 
 
 API_URL = "https://tie.digitraffic.fi/api/variable-sign/v1/signs/history"
-DIGITRAFFIC_USER = get_digitraffic_user()
 
 # Delay between API requests to reduce the risk of rate limiting.
 REQUEST_DELAY_SECONDS = 0.2
@@ -28,7 +27,7 @@ def fetch_history(device_id: str, effective_date: str) -> list[dict]:
             "effectiveDate": effective_date,
         },
         headers={
-            "Digitraffic-User": DIGITRAFFIC_USER,
+            "Digitraffic-User": get_digitraffic_user(),
             "Accept": "application/json",
         },
         timeout=30,

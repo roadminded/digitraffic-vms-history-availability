@@ -8,6 +8,12 @@ Install dependencies:
 pip install -r requirements.txt
 ```
 
+Set your own Digitraffic user identifier before running the scripts:
+
+```bash
+export DIGITRAFFIC_USER="MyOrg/vms-history-scan"
+```
+
 ## Scan selected devices
 
 Scan a selected set of VMS devices using a text file containing

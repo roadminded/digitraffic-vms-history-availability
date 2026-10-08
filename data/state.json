@@ -190,10 +190,10 @@
       "earliest_effect_date": null,
       "earliest_observed_date": null,
       "last_error": null,
-      "scan_cursor_date": "2021-05-31",
+      "scan_cursor_date": "2021-07-20",
       "status": "in_progress",
       "verified_from": "2021-01-01",
-      "verified_through": "2021-05-30"
+      "verified_through": "2021-07-19"
     },
     "KRM011412": {
       "earliest_effect_date": null,

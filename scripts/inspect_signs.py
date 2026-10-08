@@ -13,7 +13,6 @@ from digitraffic_config import get_digitraffic_user
 
 
 API_URL = "https://tie.digitraffic.fi/api/variable-sign/v1/signs"
-DIGITRAFFIC_USER = get_digitraffic_user()
 
 
 def fetch_signs() -> object:
@@ -22,7 +21,7 @@ def fetch_signs() -> object:
     response = requests.get(
         API_URL,
         headers={
-            "Digitraffic-User": DIGITRAFFIC_USER,
+            "Digitraffic-User": get_digitraffic_user(),
             "Accept": "application/json",
         },
         timeout=30,

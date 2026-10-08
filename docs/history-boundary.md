@@ -41,5 +41,5 @@ other changes in the source data.
 
 - [Digitraffic Development Roadmap](https://www.digitraffic.fi/en/development-roadmap/)
   — DPO-864: Variable speed limit signs and information boards (September 2019).
-- [Digitraffic support / Solita](https://groups.google.com/g/roaddigitrafficfi/c/kMuj5Zo-OaY),
+- [Digitraffic support / Solita](https://groups.google.com/g/roaddigitrafficfi/c/kMuj5Zo-OaY)
   — Response on VMS history retention and device-specific availability (8 October 2026).
