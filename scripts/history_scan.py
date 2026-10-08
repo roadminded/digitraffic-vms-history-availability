@@ -8,10 +8,11 @@ from datetime import date, datetime, timedelta
 import time
 
 import requests
+from digitraffic_config import get_digitraffic_user
 
 
 API_URL = "https://tie.digitraffic.fi/api/variable-sign/v1/signs/history"
-DIGITRAFFIC_USER = "RoadMinded/digitraffic-vms-history-availability"
+DIGITRAFFIC_USER = get_digitraffic_user()
 
 # Delay between API requests to reduce the risk of rate limiting.
 REQUEST_DELAY_SECONDS = 0.2
@@ -164,6 +165,7 @@ def advance_device_baseline(
     device_id: str,
     device_state: dict[str, object],
     max_days: int,
+    request_delay: float = REQUEST_DELAY_SECONDS,
 ) -> dict[str, object]:
     """Advance one device baseline scan by up to max_days."""
 
@@ -225,7 +227,7 @@ def advance_device_baseline(
         device_state["status"] = "in_progress"
         device_state["scan_cursor_date"] = cursor.isoformat()
 
-        time.sleep(REQUEST_DELAY_SECONDS)
+        time.sleep(request_delay)
 
     return {
         "state": device_state,

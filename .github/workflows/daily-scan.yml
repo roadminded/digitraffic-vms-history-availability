@@ -2,9 +2,12 @@ name: Daily VMS history scan
 
 on:
   schedule:
-    - cron: "17 1 * * *"
+    - cron: "17 0,15 * * *"
 
   workflow_dispatch:
+
+env:
+  DIGITRAFFIC_USER: RoadMinded/digitraffic-vms-history-availability
 
 permissions:
   contents: write
@@ -30,7 +33,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Scan VMS history availability
-        run: python scripts/scan_history_availability.py --limit 10
+        run: python scripts/scan_history_availability.py --limit 10 --request-delay 2.0
 
       - name: Commit updated state
         run: |

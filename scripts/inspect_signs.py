@@ -9,10 +9,11 @@ summary of the response structure for manual inspection.
 import json
 
 import requests
+from digitraffic_config import get_digitraffic_user
 
 
 API_URL = "https://tie.digitraffic.fi/api/variable-sign/v1/signs"
-DIGITRAFFIC_USER = "RoadMinded/digitraffic-vms-history-availability"
+DIGITRAFFIC_USER = get_digitraffic_user()
 
 
 def fetch_signs() -> object:

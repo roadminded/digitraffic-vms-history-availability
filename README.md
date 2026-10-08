@@ -27,7 +27,9 @@ The project currently supports:
 - gradual background scanning of incomplete devices
 - request limits and per-device scan limits
 - persistent scan state in data/state.json
-- scheduled daily scanning with GitHub Actions
+- scheduled twice-daily scanning with GitHub Actions
+- configurable delay between history API requests
+- scan status summaries and completion progress for selected device sets
 
 The current implementation is intentionally small and focused on practical
 history availability checks.
@@ -36,9 +38,7 @@ The current Digitraffic `/api/variable-sign/v1/signs` response contains
 more than 500 unique published VMS device IDs, providing a substantial
 device set for history availability scanning.
 
-## Usage
-
-### Scan variable sign devices
+## Quick start
 
 Install dependencies:
 
@@ -46,83 +46,33 @@ Install dependencies:
 pip install -r requirements.txt
 ```
 
-Scan specific devices from a text file:
+Set Digitraffic user header:
+
+```bash
+export DIGITRAFFIC_USER="MyOrg/vms-history-scan"
+```
+
+Use the provided `test_devices.txt` containing one VMS device ID per line,
+then run:
 
 ```bash
 python scripts/scan_history_availability.py \
-  --device-file test_devices.txt
+  --device-file test_devices.txt \
+  --request-delay 1.0
 ```
 
-The file contains one VMS device ID per line, for example `test_devices.txt`:
-
-```text
-KRM01
-KRM010305
-KRM011552
-```
-
-Scan the next incomplete devices from the current Digitraffic VMS list:
-
-```bash
-python scripts/scan_history_availability.py --limit 10
-```
-
-Completed devices are skipped automatically.
-
-Scan progress is stored in:
-
-```text
-data/state.json
-```
-
-Interrupted or partial scans can continue from the stored cursor
-on the next run.
-
-### Inspect a single device
-
-For quick manual inspection of one VMS device, the script queries the
-default recent history returned by the Digitraffic API:
-
-```bash
-python scripts/inspect_history.py KRM010305
-```
-
-To inspect history for a specific historical date, use `--date`:
-
-```bash
-python scripts/inspect_history.py KRM010305 --date 2021-01-02
-```
-
-The helper prints the request URL, HTTP status, response type, number of
-returned observations, earliest and latest `effectDate` values, and the first
-returned observation.
-
-These inspection commands do not update `data/state.json`.
+For selected-device scanning, request delays, scheduled runs,
+and inspection commands, see the [Usage guide](docs/usage.md)
 
 ## Historical boundary
 
-The default verification boundary is:
+The project currently uses **2021-01-01** as its historical scan lower bound.
+This is a practical project boundary, not a limitation of the Digitraffic API.
 
-```text
-2021-01-01
-```
+For details on historical data availability, retention and scan boundary
+configuration, see [`docs/history-boundary.md`](docs/history-boundary.md)
 
-This is a practical project boundary, not a claim that older
-Digitraffic VMS data does not exist.
-
-This value is stored in `data/state.json` as:
-
-```json
-"scan_lower_bound": "2021-01-01"
-```
-
-Changing this value affects newly initialized device scans.
-Existing device state keeps its current scan cursor and verified range.
-
-See [`docs/history-boundary.md`](docs/history-boundary.md)
-for additional background.
-
-## Priority requests and possible future improvements
+## Priority requests
 
 If you need availability information for specific VMS devices, you are welcome
 to open an issue and suggest device IDs for prioritised scanning.
@@ -146,14 +96,19 @@ and do not represent commitments.
 - [ ] Add selected-device rescanning ("reset") from an earlier lower bound
       using a device list file
 - [ ] Generate `data/latest.json` and `data/latest.csv` as result summaries
+- [ ] Publish automatically updated VMS history availability statistics
+      in the GitHub README
 
 ## Data source
 
-Data is retrieved from the Finnish Digitraffic road traffic API.
+Data is retrieved from the Finnish Digitraffic road traffic API,
+operated by Fintraffic Road.
 
-Digitraffic documentation:
+- [Digitraffic Road Traffic API documentation](https://www.digitraffic.fi/en/road-traffic/)
+- [Digitraffic Variable Signs](https://www.digitraffic.fi/en/road-traffic/#variable-signs)
 
-https://www.digitraffic.fi/en/road-traffic/
+For historical background and retention information, see
+[`docs/history-boundary.md`](docs/history-boundary.md).
 
 ## License
 
@@ -167,9 +122,3 @@ applicable to the original data source.
 ## Maintainer
 
 RoadMinded Systems Oy
-
-## Sources
-
-- [Fintraffic / Digitraffic — Road traffic open data API documentation](https://www.digitraffic.fi/en/road-traffic/)
-- [Fintraffic / Digitraffic — Variable signs](https://www.digitraffic.fi/en/road-traffic/#variable-signs)
-- [Fintraffic / Digitraffic Development Roadmap](https://www.digitraffic.fi/en/development-roadmap/)

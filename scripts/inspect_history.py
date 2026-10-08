@@ -11,10 +11,11 @@ import json
 from datetime import date
 
 import requests
+from digitraffic_config import get_digitraffic_user
 
 
 API_URL = "https://tie.digitraffic.fi/api/variable-sign/v1/signs/history"
-DIGITRAFFIC_USER = "RoadMinded/digitraffic-vms-history-availability"
+DIGITRAFFIC_USER = get_digitraffic_user()
 
 
 def fetch_history(device_id: str, effective_date: str | None = None) -> list[dict]:

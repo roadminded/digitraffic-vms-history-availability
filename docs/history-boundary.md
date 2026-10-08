@@ -6,6 +6,17 @@ variable sign data and supported history queries since at least September 2019:
 - `DEVICE_DATA` storage was introduced in September 2019.
 - A variable sign history query was added shortly afterwards.
 
+## Digitraffic history retention
+
+According to Digitraffic support (8 October 2026), no fixed retention period
+has currently been decided for VMS history data.
+
+Historical data availability depends on when each device was connected to
+the Digitraffic system.
+
+This means there is no confirmed global history retention boundary, and
+the earliest available observations may differ between devices.
+
 ## Project VMS history boundary
 
 For this project, the historical scan lower bound is currently set to
@@ -28,8 +39,7 @@ other changes in the source data.
 
 ## References
 
-Relevant VMS development items are documented in the
-[Digitraffic Development Roadmap](https://www.digitraffic.fi/en/development-roadmap/)
-
-- Digitraffic `DPO-864` — variable speed limit signs and information boards,
-  September 2019
+- [Digitraffic Development Roadmap](https://www.digitraffic.fi/en/development-roadmap/)
+  — DPO-864: Variable speed limit signs and information boards (September 2019).
+- [Digitraffic support / Solita](https://groups.google.com/g/roaddigitrafficfi/c/kMuj5Zo-OaY),
+  — Response on VMS history retention and device-specific availability (8 October 2026).

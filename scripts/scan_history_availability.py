@@ -13,6 +13,8 @@ from datetime import date, datetime
 
 import requests
 from history_scan import advance_device_baseline
+from digitraffic_config import get_digitraffic_user
+
 
 # Maximum number of VMS history API requests per script run.
 MAX_HISTORY_REQUESTS_PER_RUN = 500
@@ -24,7 +26,7 @@ MAX_DAYS_PER_DEVICE_PER_RUN = 50
 STATE_FILE = Path("data/state.json")
 
 SIGNS_API_URL = "https://tie.digitraffic.fi/api/variable-sign/v1/signs"
-DIGITRAFFIC_USER = "RoadMinded/digitraffic-vms-history-availability"
+DIGITRAFFIC_USER = get_digitraffic_user()
 
 
 def fetch_signs() -> dict:
@@ -375,6 +377,13 @@ def main() -> None:
         help="Text file containing one VMS device ID per line.",
     )
 
+    parser.add_argument(
+        "--request-delay",
+        type=float,
+        default=0.2,
+        help="Delay between history API requests in seconds (default: 0.2).",
+    )
+
     args = parser.parse_args()
 
     if args.limit is not None and args.limit < 0:
@@ -388,6 +397,9 @@ def main() -> None:
 
     if args.limit is not None and args.device_file is not None:
         parser.error("--limit and --device-file cannot be used together")
+
+    if args.request_delay < 0:
+        parser.error("--request-delay must be zero or greater")
 
     state = load_state()
 
@@ -447,6 +459,7 @@ def main() -> None:
                 device_id=device_id,
                 device_state=device_state,
                 max_days=max_days,
+                request_delay=args.request_delay,
             )
 
             requests_used = scan_result["requests_used"]
