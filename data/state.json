@@ -1035,19 +1035,19 @@
       "earliest_effect_date": null,
       "earliest_observed_date": null,
       "last_error": null,
-      "scan_cursor_date": "2021-05-31",
+      "scan_cursor_date": "2021-07-20",
       "status": "in_progress",
       "verified_from": "2021-01-01",
-      "verified_through": "2021-05-30"
+      "verified_through": "2021-07-19"
     },
     "KRM016852": {
       "earliest_effect_date": null,
       "earliest_observed_date": null,
       "last_error": null,
-      "scan_cursor_date": "2021-05-31",
+      "scan_cursor_date": "2021-07-20",
       "status": "in_progress",
       "verified_from": "2021-01-01",
-      "verified_through": "2021-05-30"
+      "verified_through": "2021-07-19"
     },
     "KRM01K001": {
       "earliest_effect_date": "2021-03-10T20:14:48Z",
@@ -1294,6 +1294,78 @@
     },
     "KRM020823": {
       "earliest_effect_date": "2021-01-01T05:08:49Z",
+      "earliest_observed_date": "2021-01-01",
+      "last_error": null,
+      "scan_cursor_date": null,
+      "status": "complete",
+      "verified_from": "2021-01-01",
+      "verified_through": "2021-01-01"
+    },
+    "KRM020861": {
+      "earliest_effect_date": "2021-01-01T15:17:41Z",
+      "earliest_observed_date": "2021-01-01",
+      "last_error": null,
+      "scan_cursor_date": null,
+      "status": "complete",
+      "verified_from": "2021-01-01",
+      "verified_through": "2021-01-01"
+    },
+    "KRM020921": {
+      "earliest_effect_date": "2021-01-01T15:17:41Z",
+      "earliest_observed_date": "2021-01-01",
+      "last_error": null,
+      "scan_cursor_date": null,
+      "status": "complete",
+      "verified_from": "2021-01-01",
+      "verified_through": "2021-01-01"
+    },
+    "KRM020961": {
+      "earliest_effect_date": "2021-01-01T10:56:10Z",
+      "earliest_observed_date": "2021-01-01",
+      "last_error": null,
+      "scan_cursor_date": null,
+      "status": "complete",
+      "verified_from": "2021-01-01",
+      "verified_through": "2021-01-01"
+    },
+    "KRM020962": {
+      "earliest_effect_date": "2021-01-01T15:17:41Z",
+      "earliest_observed_date": "2021-01-01",
+      "last_error": null,
+      "scan_cursor_date": null,
+      "status": "complete",
+      "verified_from": "2021-01-01",
+      "verified_through": "2021-01-01"
+    },
+    "KRM021021": {
+      "earliest_effect_date": "2021-01-01T15:17:41Z",
+      "earliest_observed_date": "2021-01-01",
+      "last_error": null,
+      "scan_cursor_date": null,
+      "status": "complete",
+      "verified_from": "2021-01-01",
+      "verified_through": "2021-01-01"
+    },
+    "KRM021061": {
+      "earliest_effect_date": "2021-01-01T09:03:37Z",
+      "earliest_observed_date": "2021-01-01",
+      "last_error": null,
+      "scan_cursor_date": null,
+      "status": "complete",
+      "verified_from": "2021-01-01",
+      "verified_through": "2021-01-01"
+    },
+    "KRM021121": {
+      "earliest_effect_date": "2021-01-01T15:17:41Z",
+      "earliest_observed_date": "2021-01-01",
+      "last_error": null,
+      "scan_cursor_date": null,
+      "status": "complete",
+      "verified_from": "2021-01-01",
+      "verified_through": "2021-01-01"
+    },
+    "KRM021122": {
+      "earliest_effect_date": "2021-01-01T15:17:41Z",
       "earliest_observed_date": "2021-01-01",
       "last_error": null,
       "scan_cursor_date": null,
